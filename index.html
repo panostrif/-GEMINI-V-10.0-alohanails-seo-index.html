@@ -2,79 +2,80 @@
 <html lang="el">
 <head>
     <meta charset="UTF-8">
-    <title>ALOHA Nails - Global Guru Suite v10.0</title>
+    <title>ALOHA Nails - Global Guru Suite v10.5</title>
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Mono&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
     <style>
         :root { --bg: #050505; --surface: #111; --accent: #ff4f6d; --text: #f0ece4; --gemini: #4285f4; --groq: #f5c842; }
         body { background: var(--bg); color: var(--text); font-family: 'Syne', sans-serif; padding: 20px; }
-        .container { max-width: 1200px; margin: 0 auto; }
+        .container { max-width: 1100px; margin: 0 auto; }
         .panel { background: var(--surface); border-radius: 20px; padding: 25px; margin-bottom: 20px; border: 1px solid #222; }
-        h1 { color: var(--accent); text-transform: uppercase; text-align: center; margin-bottom: 5px; }
-        .api-input { width: 100%; background: #000; color: white; border: 1px solid #333; padding: 12px; border-radius: 10px; font-family: 'DM Mono', monospace; margin-top: 10px; }
-        .engine-selector, .style-selector { display: flex; gap: 10px; justify-content: center; margin: 20px 0; flex-wrap: wrap; }
-        .btn { padding: 10px 20px; border-radius: 50px; border: 1px solid #333; background: transparent; color: white; cursor: pointer; font-weight: 700; transition: 0.3s; }
+        h1 { color: var(--accent); text-transform: uppercase; text-align: center; letter-spacing: -1px; }
+        .api-input { width: 100%; background: #000; color: white; border: 1px solid #333; padding: 12px; border-radius: 10px; font-family: 'DM Mono', monospace; margin-top: 10px; box-sizing: border-box; }
+        .btn { padding: 10px 20px; border-radius: 50px; border: 1px solid #333; background: transparent; color: white; cursor: pointer; font-weight: 700; transition: 0.3s; margin: 5px; }
         .btn.active { border-color: var(--accent); background: rgba(255, 79, 109, 0.1); }
-        .btn-main { background: var(--accent); color: white; border: none; padding: 20px; border-radius: 15px; width: 100%; font-weight: 800; cursor: pointer; text-transform: uppercase; margin-top: 20px; }
+        .btn-main { background: var(--accent); color: white; border: none; padding: 20px; border-radius: 15px; width: 100%; font-weight: 800; cursor: pointer; text-transform: uppercase; font-size: 1.2rem; }
+        .upload-zone { border: 2px dashed #444; padding: 20px; text-align: center; border-radius: 15px; margin: 15px 0; cursor: pointer; transition: 0.3s; }
+        .upload-zone:hover { border-color: var(--accent); background: rgba(255, 79, 109, 0.05); }
         .result-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px; margin-top: 25px; }
         .card { background: #000; padding: 20px; border-radius: 15px; border-left: 4px solid var(--accent); }
-        .social-card { border-left-color: #4ade80; background: #0a110a; }
-        .loader { display: none; text-align: center; color: var(--accent); font-weight: 800; margin: 20px; }
-        .backup-bar { display: flex; gap: 10px; margin-top: 10px; font-size: 0.8rem; }
+        .loader { display: none; text-align: center; color: var(--accent); font-weight: 800; padding: 20px; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>ALOHA NAILS <span style="color:white">V10.0</span></h1>
-    <p style="text-align:center; opacity:0.5; margin-bottom:30px;">The Ultimate Global Guru Advertising Suite</p>
+    <h1>ALOHA NAILS <span style="color:white">GURU V10.5</span></h1>
 
     <div class="panel">
-        <label>🔑 API KEYS & ΔΙΑΧΕΙΡΙΣΗ ΓΝΩΣΗΣ</label>
+        <label>🔑 API KEYS & BACKUP</label>
         <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px;">
             <input type="password" id="groqKey" class="api-input" placeholder="Groq Key" oninput="save()">
             <input type="password" id="geminiKey" class="api-input" placeholder="Gemini Key" oninput="save()">
         </div>
-        <div class="backup-bar">
-            <button onclick="exportKnowledge()" class="btn">📥 BACKUP ΓΝΩΣΗΣ</button>
-            <button onclick="document.getElementById('importFile').click()" class="btn">📤 ΕΠΑΝΑΦΟΡΑ</button>
+        <div style="margin-top:15px;">
+            <button onclick="exportKnowledge()" class="btn">📥 DOWNLOAD BRAIN BACKUP</button>
+            <button onclick="document.getElementById('importFile').click()" class="btn">📤 UPLOAD BRAIN</button>
             <input type="file" id="importFile" hidden onchange="importKnowledge(this)">
         </div>
     </div>
 
     <div class="panel" style="border-color: #4ade80;">
-        <label style="color:#4ade80;">🧠 ΜΟΝΙΜΗ ΓΝΩΣΙΑΚΗ ΒΑΣΗ (Εκπαίδευσε την AI)</label>
-        <textarea id="brandKnowledge" rows="4" class="api-input" oninput="save()" placeholder="Κάνε επικόλληση εδώ το Brand Story, οδηγίες χρήσης, Vegan rules κλπ."></textarea>
-        <input type="text" id="urlInput" class="api-input" placeholder="URL Προϊόντος για ανάλυση (προαιρετικό)">
+        <label style="color:#4ade80;">🧠 ΜΟΝΙΜΗ ΓΝΩΣΙΑΚΗ ΒΑΣΗ (Brand Story & Rules)</label>
+        <textarea id="brandKnowledge" rows="4" class="api-input" oninput="save()" placeholder="Κάνε επικόλληση εδώ το κείμενο από το Word/PDF σου..."></textarea>
+        <input type="text" id="urlInput" class="api-input" placeholder="🔗 URL Προϊόντος (για αυτόματο διάβασμα)">
     </div>
 
     <div class="panel">
-        <label>🎨 ΕΠΙΛΟΓΗ ΥΦΟΥΣ (ADVERTISING GURU)</label>
-        <div class="style-selector" id="styleSelector">
-            <button class="btn active" data-style="luxury" onclick="setStyle('luxury')">David Ogilvy (Luxury)</button>
-            <button class="btn" data-style="sales" onclick="setStyle('sales')">Gary Halbert (Hard Sell)</button>
-            <button class="btn" data-style="creative" onclick="setStyle('creative')">Leo Burnett (Storytelling)</button>
+        <label>📊 ΜΑΖΙΚΟ ΑΝΕΒΑΣΜΑ (Excel/CSV)</label>
+        <div class="upload-zone" onclick="document.getElementById('excelFile').click()">
+            <p id="fileName">Κάνε κλικ για να ανεβάσεις λίστα χρωμάτων (Excel ή CSV)</p>
+            <input type="file" id="excelFile" hidden accept=".csv, .xlsx, .xls" onchange="handleFile(this)">
         </div>
-
-        <label>🎯 ΤΙ ΧΡΩΜΑ ΦΤΙΑΧΝΟΥΜΕ;</label>
-        <input type="text" id="productInfo" class="api-input" style="border-color:var(--accent)" placeholder="π.χ. Midnight Blue AF30, σκούρο μπλε με shimmer">
-        
-        <div class="engine-selector">
-            <button class="btn active" id="btnGroq" onclick="setEngine('groq')">⚡ GROQ (FAST)</button>
-            <button class="btn" id="btnGemini" onclick="setEngine('gemini')">💎 GEMINI (SMART)</button>
-        </div>
-
-        <button class="btn-main" onclick="runGuru()">ΔΗΜΙΟΥΡΓΙΑ ΠΕΡΙΕΧΟΜΕΝΟΥ V10</button>
+        <div id="filePreview" style="font-size: 0.8rem; color: #4ade80;"></div>
     </div>
 
-    <div id="loader" class="loader">ΟΙ GURUS ΣΥΝΕΔΡΙΑΖΟΥΝ ΓΙΑ ΤΗΝ ALOHA NAILS...</div>
+    <div class="panel">
+        <label>🎯 ΤΙ ΧΡΩΜΑ ΦΤΙΑΧΝΟΥΜΕ ΤΩΡΑ;</label>
+        <input type="text" id="productInfo" class="api-input" style="border-color:var(--accent)" placeholder="π.χ. Midnight Blue AF30, σκούρο μπλε">
+        
+        <div style="text-align:center; margin:20px 0;">
+            <button class="btn active" id="btnGroq" onclick="setEngine('groq')">⚡ GROQ</button>
+            <button class="btn" id="btnGemini" onclick="setEngine('gemini')">💎 GEMINI</button>
+        </div>
+
+        <button class="btn-main" onclick="runGuru()">ΔΗΜΙΟΥΡΓΙΑ SEO & SOCIAL</button>
+    </div>
+
+    <div id="loader" class="loader">ΟΙ GURUS ΑΝΑΛΥΟΥΝ ΤΑ ΔΕΔΟΜΕΝΑ...</div>
     <div id="results" class="result-grid"></div>
 </div>
 
 <script>
     let engine = 'groq';
-    let currentStyle = 'luxury';
+    let bulkData = [];
 
-    // Αυτόματη Φόρτωση
     window.onload = () => {
         document.getElementById('groqKey').value = localStorage.getItem('ak_groq') || '';
         document.getElementById('geminiKey').value = localStorage.getItem('ak_gemini') || '';
@@ -93,49 +94,60 @@
         document.getElementById('btnGemini').classList.toggle('active', e === 'gemini');
     }
 
-    function setStyle(s) {
-        currentStyle = s;
-        document.querySelectorAll('#styleSelector .btn').forEach(b => b.classList.remove('active'));
-        document.querySelector(`[data-style="${s}"]`).classList.add('active');
+    // Διαχείριση Αρχείων Excel/CSV
+    function handleFile(input) {
+        const file = input.files[0];
+        document.getElementById('fileName').innerText = "Αρχείο: " + file.name;
+        
+        const reader = new FileReader();
+        if (file.name.endsWith('.csv')) {
+            reader.onload = (e) => {
+                const results = Papa.parse(e.target.result, {header:true});
+                bulkData = results.data;
+                document.getElementById('filePreview').innerText = `Βρέθηκαν ${bulkData.length} εγγραφές!`;
+            };
+            reader.readAsText(file);
+        } else {
+            reader.onload = (e) => {
+                const data = new Uint8Array(e.target.result);
+                const workbook = XLSX.read(data, {type: 'array'});
+                const sheet = workbook.Sheets[workbook.SheetNames[0]];
+                bulkData = XLSX.utils.sheet_to_json(sheet);
+                document.getElementById('filePreview').innerText = `Βρέθηκαν ${bulkData.length} εγγραφές από το Excel!`;
+            };
+            reader.readAsArrayBuffer(file);
+        }
     }
 
     async function runGuru() {
         const prod = document.getElementById('productInfo').value;
         const base = document.getElementById('brandKnowledge').value;
-        const url = document.getElementById('urlInput').value;
         const loader = document.getElementById('loader');
-        
-        if(!prod) return alert("Γράψε ένα προϊόν!");
+        const key = engine === 'groq' ? document.getElementById('groqKey').value : document.getElementById('geminiKey').value;
+
+        if(!prod && bulkData.length === 0) return alert("Βάλε ένα προϊόν ή ανέβασε αρχείο!");
         loader.style.display = "block";
-        document.getElementById('results').innerHTML = "";
 
         const prompt = `
-            Είσαι ο global guru της διαφήμισης (στυλ: ${currentStyle}). 
-            ΕΤΑΙΡΕΙΑ: ALOHA Nails. 
+            Ως Global Guru Διαφήμισης για την ALOHA Nails.
             ΓΝΩΣΗ: ${base}.
-            ΠΡΟΪΟΝ: ${prod}.
-            URL: ${url}.
-
-            Δημιούργησε τα εξής σε JSON:
-            1. SEO (gr & en): alt, title, caption, desc, url.
-            2. SOCIAL: instagram_caption, tiktok_hook, email_subject.
-            3. MOOD: color_psychology (τι νιώθει η πελάτισσα).
+            ΠΡΟΪΟΝ: ${prod || JSON.stringify(bulkData[0])}.
+            Φτιάξε SEO (alt, title, caption, desc, url) σε GR/EN και Social Media hooks.
             Response strictly in JSON format.`;
 
         try {
-            const key = engine === 'groq' ? document.getElementById('groqKey').value : document.getElementById('geminiKey').value;
-            let raw = engine === 'groq' ? await callGroq(prompt, key) : await callGemini(prompt, key);
+            let raw = (engine === 'groq') ? await callGroq(prompt, key) : await callGemini(prompt, key);
             const data = JSON.parse(raw.replace(/```json|```/g, ""));
             render(data);
-        } catch (e) { alert("Σφάλμα σύνδεσης με την AI."); }
+        } catch (e) { alert("Σφάλμα AI. Ελέγξτε το κλειδί σας."); }
         loader.style.display = "none";
     }
 
     async function callGroq(p, k) {
         const r = await fetch('https://api.groq.com/openai/v1/chat/completions', {
             method: 'POST',
-            headers: {'Authorization': `Bearer ${k}`, 'Content-Type': 'application/json'},
-            body: JSON.stringify({ model: "llama3-8b-8192", messages: [{role: "user", content: p}] })
+            headers: {'Authorization': `Bearer ${k.trim()}`, 'Content-Type': 'application/json'},
+            body: JSON.stringify({ model: "llama-3.3-70b-versatile", messages: [{role: "user", content: p}] })
         });
         const d = await r.json(); return d.choices[0].message.content;
     }
@@ -151,24 +163,21 @@
 
     function render(d) {
         const res = document.getElementById('results');
-        // SEO Fields
-        ['alt', 'title', 'caption', 'desc', 'url'].forEach(f => {
-            res.innerHTML += `
-                <div class="card"><label>${f.toUpperCase()} (GR)</label><p>${d.gr ? d.gr[f] : d.seo.gr[f]}</p></div>
-                <div class="card" style="border-color:var(--gemini)"><label>${f.toUpperCase()} (EN)</label><p>${d.en ? d.en[f] : d.seo.en[f]}</p></div>
-            `;
+        res.innerHTML = "";
+        const sections = [
+            {t: "TITLE (GR)", v: d.gr?.title || d.seo?.gr?.title},
+            {t: "DESCRIPTION (GR)", v: d.gr?.desc || d.seo?.gr?.desc},
+            {t: "INSTAGRAM", v: d.social?.instagram_caption},
+            {t: "TIKTOK HOOK", v: d.social?.tiktok_hook}
+        ];
+        sections.forEach(s => {
+            if(s.v) res.innerHTML += `<div class="card"><label style="color:var(--accent);font-size:0.7rem">${s.t}</label><p>${s.v}</p></div>`;
         });
-        // Social & Mood
-        res.innerHTML += `
-            <div class="card social-card"><label>📸 INSTAGRAM CAPTION</label><p>${d.social.instagram_caption}</p></div>
-            <div class="card social-card"><label>🎵 TIKTOK HOOK</label><p>${d.social.tiktok_hook}</p></div>
-            <div class="card social-card" style="border-color:#f5c842"><label>🌈 COLOR PSYCHOLOGY</label><p>${d.mood ? d.mood.color_psychology : d.color_psychology}</p></div>
-        `;
     }
 
     function exportKnowledge() {
         const b = new Blob([localStorage.getItem('ak_base')], {type: 'text/plain'});
-        const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = 'aloha_brain.txt'; a.click();
+        const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = 'aloha_backup.txt'; a.click();
     }
 
     function importKnowledge(i) {
