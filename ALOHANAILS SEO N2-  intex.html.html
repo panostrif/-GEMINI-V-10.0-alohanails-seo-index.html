@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <title>ALOHA Nails - Global Guru Suite v10.0</title>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg: #050505; --surface: #111; --accent: #ff4f6d; --text: #f0ece4; --gemini: #4285f4; --groq: #f5c842; }
+        body { background: var(--bg); color: var(--text); font-family: 'Syne', sans-serif; padding: 20px; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .panel { background: var(--surface); border-radius: 20px; padding: 25px; margin-bottom: 20px; border: 1px solid #222; }
+        h1 { color: var(--accent); text-transform: uppercase; text-align: center; margin-bottom: 5px; }
+        .api-input { width: 100%; background: #000; color: white; border: 1px solid #333; padding: 12px; border-radius: 10px; font-family: 'DM Mono', monospace; margin-top: 10px; }
+        .engine-selector, .style-selector { display: flex; gap: 10px; justify-content: center; margin: 20px 0; flex-wrap: wrap; }
+        .btn { padding: 10px 20px; border-radius: 50px; border: 1px solid #333; background: transparent; color: white; cursor: pointer; font-weight: 700; transition: 0.3s; }
+        .btn.active { border-color: var(--accent); background: rgba(255, 79, 109, 0.1); }
+        .btn-main { background: var(--accent); color: white; border: none; padding: 20px; border-radius: 15px; width: 100%; font-weight: 800; cursor: pointer; text-transform: uppercase; margin-top: 20px; }
+        .result-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px; margin-top: 25px; }
+        .card { background: #000; padding: 20px; border-radius: 15px; border-left: 4px solid var(--accent); }
+        .social-card { border-left-color: #4ade80; background: #0a110a; }
+        .loader { display: none; text-align: center; color: var(--accent); font-weight: 800; margin: 20px; }
+        .backup-bar { display: flex; gap: 10px; margin-top: 10px; font-size: 0.8rem; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>ALOHA NAILS <span style="color:white">V10.0</span></h1>
+    <p style="text-align:center; opacity:0.5; margin-bottom:30px;">The Ultimate Global Guru Advertising Suite</p>
+
+    <div class="panel">
+        <label>🔑 API KEYS & ΔΙΑΧΕΙΡΙΣΗ ΓΝΩΣΗΣ</label>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px;">
+            <input type="password" id="groqKey" class="api-input" placeholder="Groq Key" oninput="save()">
+            <input type="password" id="geminiKey" class="api-input" placeholder="Gemini Key" oninput="save()">
+        </div>
+        <div class="backup-bar">
+            <button onclick="exportKnowledge()" class="btn">📥 BACKUP ΓΝΩΣΗΣ</button>
+            <button onclick="document.getElementById('importFile').click()" class="btn">📤 ΕΠΑΝΑΦΟΡΑ</button>
+            <input type="file" id="importFile" hidden onchange="importKnowledge(this)">
+        </div>
+    </div>
+
+    <div class="panel" style="border-color: #4ade80;">
+        <label style="color:#4ade80;">🧠 ΜΟΝΙΜΗ ΓΝΩΣΙΑΚΗ ΒΑΣΗ (Εκπαίδευσε την AI)</label>
+        <textarea id="brandKnowledge" rows="4" class="api-input" oninput="save()" placeholder="Κάνε επικόλληση εδώ το Brand Story, οδηγίες χρήσης, Vegan rules κλπ."></textarea>
+        <input type="text" id="urlInput" class="api-input" placeholder="URL Προϊόντος για ανάλυση (προαιρετικό)">
+    </div>
+
+    <div class="panel">
+        <label>🎨 ΕΠΙΛΟΓΗ ΥΦΟΥΣ (ADVERTISING GURU)</label>
+        <div class="style-selector" id="styleSelector">
+            <button class="btn active" data-style="luxury" onclick="setStyle('luxury')">David Ogilvy (Luxury)</button>
+            <button class="btn" data-style="sales" onclick="setStyle('sales')">Gary Halbert (Hard Sell)</button>
+            <button class="btn" data-style="creative" onclick="setStyle('creative')">Leo Burnett (Storytelling)</button>
+        </div>
+
+        <label>🎯 ΤΙ ΧΡΩΜΑ ΦΤΙΑΧΝΟΥΜΕ;</label>
+        <input type="text" id="productInfo" class="api-input" style="border-color:var(--accent)" placeholder="π.χ. Midnight Blue AF30, σκούρο μπλε με shimmer">
+        
+        <div class="engine-selector">
+            <button class="btn active" id="btnGroq" onclick="setEngine('groq')">⚡ GROQ (FAST)</button>
+            <button class="btn" id="btnGemini" onclick="setEngine('gemini')">💎 GEMINI (SMART)</button>
+        </div>
+
+        <button class="btn-main" onclick="runGuru()">ΔΗΜΙΟΥΡΓΙΑ ΠΕΡΙΕΧΟΜΕΝΟΥ V10</button>
+    </div>
+
+    <div id="loader" class="loader">ΟΙ GURUS ΣΥΝΕΔΡΙΑΖΟΥΝ ΓΙΑ ΤΗΝ ALOHA NAILS...</div>
+    <div id="results" class="result-grid"></div>
+</div>
+
+<script>
+    let engine = 'groq';
+    let currentStyle = 'luxury';
+
+    // Αυτόματη Φόρτωση
+    window.onload = () => {
+        document.getElementById('groqKey').value = localStorage.getItem('ak_groq') || '';
+        document.getElementById('geminiKey').value = localStorage.getItem('ak_gemini') || '';
+        document.getElementById('brandKnowledge').value = localStorage.getItem('ak_base') || '';
+    };
+
+    function save() {
+        localStorage.setItem('ak_groq', document.getElementById('groqKey').value);
+        localStorage.setItem('ak_gemini', document.getElementById('geminiKey').value);
+        localStorage.setItem('ak_base', document.getElementById('brandKnowledge').value);
+    }
+
+    function setEngine(e) {
+        engine = e;
+        document.getElementById('btnGroq').classList.toggle('active', e === 'groq');
+        document.getElementById('btnGemini').classList.toggle('active', e === 'gemini');
+    }
+
+    function setStyle(s) {
+        currentStyle = s;
+        document.querySelectorAll('#styleSelector .btn').forEach(b => b.classList.remove('active'));
+        document.querySelector(`[data-style="${s}"]`).classList.add('active');
+    }
+
+    async function runGuru() {
+        const prod = document.getElementById('productInfo').value;
+        const base = document.getElementById('brandKnowledge').value;
+        const url = document.getElementById('urlInput').value;
+        const loader = document.getElementById('loader');
+        
+        if(!prod) return alert("Γράψε ένα προϊόν!");
+        loader.style.display = "block";
+        document.getElementById('results').innerHTML = "";
+
+        const prompt = `
+            Είσαι ο global guru της διαφήμισης (στυλ: ${currentStyle}). 
+            ΕΤΑΙΡΕΙΑ: ALOHA Nails. 
+            ΓΝΩΣΗ: ${base}.
+            ΠΡΟΪΟΝ: ${prod}.
+            URL: ${url}.
+
+            Δημιούργησε τα εξής σε JSON:
+            1. SEO (gr & en): alt, title, caption, desc, url.
+            2. SOCIAL: instagram_caption, tiktok_hook, email_subject.
+            3. MOOD: color_psychology (τι νιώθει η πελάτισσα).
+            Response strictly in JSON format.`;
+
+        try {
+            const key = engine === 'groq' ? document.getElementById('groqKey').value : document.getElementById('geminiKey').value;
+            let raw = engine === 'groq' ? await callGroq(prompt, key) : await callGemini(prompt, key);
+            const data = JSON.parse(raw.replace(/```json|```/g, ""));
+            render(data);
+        } catch (e) { alert("Σφάλμα σύνδεσης με την AI."); }
+        loader.style.display = "none";
+    }
+
+    async function callGroq(p, k) {
+        const r = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+            method: 'POST',
+            headers: {'Authorization': `Bearer ${k}`, 'Content-Type': 'application/json'},
+            body: JSON.stringify({ model: "llama3-8b-8192", messages: [{role: "user", content: p}] })
+        });
+        const d = await r.json(); return d.choices[0].message.content;
+    }
+
+    async function callGemini(p, k) {
+        const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${k}`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ contents: [{ parts: [{ text: p }] }] })
+        });
+        const d = await r.json(); return d.candidates[0].content.parts[0].text;
+    }
+
+    function render(d) {
+        const res = document.getElementById('results');
+        // SEO Fields
+        ['alt', 'title', 'caption', 'desc', 'url'].forEach(f => {
+            res.innerHTML += `
+                <div class="card"><label>${f.toUpperCase()} (GR)</label><p>${d.gr ? d.gr[f] : d.seo.gr[f]}</p></div>
+                <div class="card" style="border-color:var(--gemini)"><label>${f.toUpperCase()} (EN)</label><p>${d.en ? d.en[f] : d.seo.en[f]}</p></div>
+            `;
+        });
+        // Social & Mood
+        res.innerHTML += `
+            <div class="card social-card"><label>📸 INSTAGRAM CAPTION</label><p>${d.social.instagram_caption}</p></div>
+            <div class="card social-card"><label>🎵 TIKTOK HOOK</label><p>${d.social.tiktok_hook}</p></div>
+            <div class="card social-card" style="border-color:#f5c842"><label>🌈 COLOR PSYCHOLOGY</label><p>${d.mood ? d.mood.color_psychology : d.color_psychology}</p></div>
+        `;
+    }
+
+    function exportKnowledge() {
+        const b = new Blob([localStorage.getItem('ak_base')], {type: 'text/plain'});
+        const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = 'aloha_brain.txt'; a.click();
+    }
+
+    function importKnowledge(i) {
+        const r = new FileReader();
+        r.onload = () => { localStorage.setItem('ak_base', r.result); location.reload(); };
+        r.readAsText(i.files[0]);
+    }
+</script>
+</body>
+</html>
