@@ -8,34 +8,156 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        :root { --aloha: #ff4f6d; --bg: #0a0a0a; --panel: #161616; --border: #262626; --text: #f5f5f5; }
-        body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; margin: 0; padding: 20px; }
-        .container { max-width: 1300px; margin: 0 auto; }
-        header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid var(--border); padding-bottom: 20px; }
-        header h1 { font-family: 'Syne'; color: var(--aloha); font-size: 2.5rem; margin: 0; }
-        
-        /* Καρτέλες (Tabs) */
-        .tabs { display: flex; gap: 5px; margin-bottom: 0; }
-        .tab-btn { background: #111; border: 1px solid var(--border); border-bottom: none; color: #888; padding: 15px 25px; cursor: pointer; border-radius: 10px 10px 0 0; font-weight: bold; font-size: 0.9rem; }
-        .tab-btn.active { background: var(--panel); color: var(--aloha); border-top: 3px solid var(--aloha); }
-        .tab-content { background: var(--panel); border: 1px solid var(--border); padding: 30px; border-radius: 0 10px 10px 10px; display: none; min-height: 500px; }
-        .tab-content.active { display: block; }
+        :root {
+            --aloha: #ff4f6d;
+            --bg: #0a0a0a;
+            --panel: #161616;
+            --border: #262626;
+            --text: #f5f5f5;
+        }
 
-        /* Πλαίσια και Κουμπιά */
-        input, textarea, select { width: 100%; background: #000; border: 1px solid var(--border); color: white; padding: 12px; border-radius: 8px; margin-top: 5px; box-sizing: border-box; }
-        .btn { background: var(--aloha); color: white; border: none; padding: 12px 25px; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.2s; }
-        .btn:hover { opacity: 0.8; }
-        .btn-dark { background: #333; }
+        * { box-sizing: border-box; }
 
-        /* Πίνακας Προϊόντων */
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; background: #000; border-radius: 10px; overflow: hidden; }
-        th { text-align: left; padding: 15px; color: var(--aloha); border-bottom: 1px solid var(--border); }
-        td { padding: 15px; border-bottom: 1px solid var(--border); font-size: 0.9rem; }
-        .badge { padding: 5px 10px; border-radius: 5px; font-size: 0.75rem; font-weight: bold; }
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 20px;
+        }
+
+        header h1 {
+            font-family: 'Syne';
+            color: var(--aloha);
+            font-size: 2.5rem;
+            margin: 0;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 0;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            background: #111;
+            border: 1px solid var(--border);
+            border-bottom: none;
+            color: #888;
+            padding: 15px 25px;
+            cursor: pointer;
+            border-radius: 10px 10px 0 0;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .tab-btn.active {
+            background: var(--panel);
+            color: var(--aloha);
+            border-top: 3px solid var(--aloha);
+        }
+
+        .tab-content {
+            background: var(--panel);
+            border: 1px solid var(--border);
+            padding: 30px;
+            border-radius: 0 10px 10px 10px;
+            display: none;
+            min-height: 500px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            background: #000;
+            border: 1px solid var(--border);
+            color: white;
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 5px;
+            box-sizing: border-box;
+        }
+
+        .btn {
+            background: var(--aloha);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+
+        .btn:hover {
+            opacity: 0.8;
+        }
+
+        .btn-dark {
+            background: #333;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: #000;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        th {
+            text-align: left;
+            padding: 15px;
+            color: var(--aloha);
+            border-bottom: 1px solid var(--border);
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.9rem;
+            vertical-align: top;
+        }
+
+        .badge {
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            display: inline-block;
+        }
+
         .status-pending { background: #333; color: #999; }
         .status-done { background: #1b4332; color: #8ed0a9; }
         .status-error { background: #5c1a1a; color: #ff8888; }
         .status-working { background: #b8860b; color: #fff; }
+
+        .two-col {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .two-col > div {
+            flex: 1 1 300px;
+        }
     </style>
 </head>
 <body>
@@ -52,8 +174,8 @@
     </div>
 
     <div id="setup" class="tab-content active">
-        <div style="display:flex; gap:30px;">
-            <div style="flex:1;">
+        <div class="two-col">
+            <div>
                 <h3 style="color:var(--aloha)">🔑 Τα Κλειδιά σου (API)</h3>
                 <label>Κλειδί GROQ (Για το μοντέλο Llama 3):</label>
                 <input type="password" id="groqKey" placeholder="gsk_..." onchange="saveConfig()">
@@ -63,15 +185,15 @@
                     <option value="groq">Groq - Llama 3 8B (Συνιστάται)</option>
                 </select>
             </div>
-            <div style="flex:1;">
+            <div>
                 <h3 style="color:var(--aloha)">🧠 Γνώσεις της Εταιρείας (Brand Story)</h3>
                 <label>Τι πρέπει να θυμάται πάντα ο Guru;</label>
-                <textarea id="brandStory" rows="6" onchange="saveConfig()">ALOHA Nails: Υψηλή ποιότητα. Vegan, Cruelty Free. Hema Free. Στόχος μας η απόλυτη εξυπηρέτηση των επαγγελματιών και η ελευθερία στο στυλ.</textarea>
+                <textarea id="brandStory" rows="6" onchange="saveConfig()">ALOHA Nails: Υψηλή ποιότητα. Vegan, Cruelty Free. Hema Free. Στόχος μας η απόλυτη εξυπηρέτηση, premium αισθητική και αποτελεσματική πώληση.</textarea>
             </div>
         </div>
-        
+
         <hr style="border:1px solid #333; margin: 40px 0;">
-        
+
         <div style="text-align:center;">
             <h3>📁 Ανέβασε το αρχείο με τα χρώματα</h3>
             <p style="color:#aaa;">Το Excel πρέπει να έχει στήλες με όνομα: <b>SKU</b>, <b>Όνομα</b>, <b>Σειρά</b>.</p>
@@ -81,9 +203,9 @@
     </div>
 
     <div id="inventory" class="tab-content">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 20px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 20px; flex-wrap: wrap; gap: 15px;">
             <div style="font-size:1.2rem; font-weight:bold;">
-                Σύνολο: <span id="statTotal" style="color:var(--aloha)">0</span> | 
+                Σύνολο: <span id="statTotal" style="color:var(--aloha)">0</span> |
                 Έτοιμα: <span id="statDone" style="color:#4ade80">0</span>
             </div>
             <div>
@@ -111,7 +233,6 @@
 </div>
 
 <script>
-    // === ΒΑΣΙΚΑ ΔΕΔΟΜΕΝΑ ===
     let products = [];
     const theGurus = [
         { name: "Τεχνικός", style: "Γράψε αυστηρά, επαγγελματικά. Τόνισε το Hema-Free και την εφαρμογή." },
@@ -119,17 +240,24 @@
         { name: "Social Media", style: "Γράψε χαρούμενα, με emojis. Τόνισε τη λέξη viral." }
     ];
 
-    // === ΣΥΣΤΗΜΑ ΚΑΡΤΕΛΩΝ (TABS) ===
-    function openTab(evt, tabName) {
-        let contents = document.getElementsByClassName("tab-content");
-        for (let i = 0; i < contents.length; i++) contents[i].classList.remove("active");
-        let btns = document.getElementsByClassName("tab-btn");
-        for (let i = 0; i < btns.length; i++) btns[i].classList.remove("active");
-        document.getElementById(tabName).classList.add("active");
-        evt.currentTarget.classList.add("active");
+    function escapeHtml(value) {
+      return String(value == null ? '' : value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
     }
 
-    // === ΑΠΟΘΗΚΕΥΣΗ ΡΥΘΜΙΣΕΩΝ ΣΤΟΝ BROWSER ===
+    function openTab(evt, tabName) {
+        const contents = document.getElementsByClassName('tab-content');
+        for (let i = 0; i < contents.length; i++) contents[i].classList.remove('active');
+        const btns = document.getElementsByClassName('tab-btn');
+        for (let i = 0; i < btns.length; i++) btns[i].classList.remove('active');
+        document.getElementById(tabName).classList.add('active');
+        evt.currentTarget.classList.add('active');
+    }
+
     window.onload = () => {
         document.getElementById('groqKey').value = localStorage.getItem('aloha_groq') || '';
         document.getElementById('brandStory').value = localStorage.getItem('aloha_brand') || 'ALOHA Nails: Hema Free, Cruelty Free.';
@@ -140,76 +268,124 @@
         localStorage.setItem('aloha_brand', document.getElementById('brandStory').value);
     }
 
-    // === ΕΙΣΑΓΩΓΗ EXCEL (Η ΑΣΠΙΔΑ ΤΩΝ ΚΕΝΩΝ ΚΕΛΙΩΝ) ===
+    function normalizeKey(key) {
+      return String(key || '').trim().toLowerCase();
+    }
+
     function importExcel(input) {
+        if (!input || !input.files || !input.files[0]) {
+            alert('Δεν επιλέχθηκε αρχείο. Επιλέξτε .xlsx, .xls ή .csv');
+            return;
+        }
+
+        const file = input.files[0];
+        const lower = file.name.toLowerCase();
+        if (!lower.endsWith('.xlsx') && !lower.endsWith('.xls') && !lower.endsWith('.csv')) {
+            alert('Μη υποστηριζόμενο αρχείο. Επιλέξτε .xlsx, .xls ή .csv');
+            return;
+        }
+
         const reader = new FileReader();
         reader.onload = (e) => {
             try {
                 const data = new Uint8Array(e.target.result);
-                const workbook = XLSX.read(data, {type: 'array'});
+                const workbook = XLSX.read(data, { type: 'array' });
                 const sheet = workbook.Sheets[workbook.SheetNames[0]];
                 const jsonRaw = XLSX.utils.sheet_to_json(sheet);
-                
-                // ΕΔΩ ΕΙΝΑΙ Η ΛΥΣΗ ΓΙΑ ΤΟ ΣΦΑΛΜΑ 100: Αποκλείουμε όσες γραμμές δεν έχουν SKU.
+
                 products = jsonRaw.filter(row => row.SKU || row['Κωδικός']).map((row, index) => {
+                    const sku = String(row.SKU || row['Κωδικός'] || '').trim();
+                    const name = String(row.Name || row['Όνομα'] || 'Προϊόν χωρίς όνομα').trim();
+                    const collection = String(row.Collection || row['Σειρά'] || 'Γενική Σειρά').trim();
                     return {
                         id: index,
-                        sku: String(row.SKU || row['Κωδικός'] || '').trim(),
-                        name: row.Name || row['Όνομα'] || 'Προϊόν χωρίς όνομα',
-                        collection: row.Collection || row['Σειρά'] || 'Γενική Σειρά',
-                        status: 'pending', // pending, working, done, error
+                        sku,
+                        name,
+                        collection,
+                        status: 'pending',
                         result: null
                     };
                 });
-                
+
                 renderTable();
-                alert(`Μπράβο! Φορτώθηκαν με επιτυχία ${products.length} προϊόντα χωρίς σφάλματα.`);
-                // Αυτόματη αλλαγή στην καρτέλα προϊόντων
+                alert(`Μπράβο! Φορτώθηκαν με επιτυχία ${products.length} προϊόντα.`);
                 document.getElementsByClassName('tab-btn')[1].click();
             } catch (err) {
-                alert("Υπήρξε πρόβλημα με το Excel. Σιγουρέψου ότι δεν είναι κατεστραμμένο.");
+                alert('Υπήρξε πρόβλημα με το Excel. Σιγουρέψου ότι δεν είναι κατεστραμμένο.');
                 console.error(err);
             }
         };
-        reader.readAsArrayBuffer(input.files[0]);
+        reader.readAsArrayBuffer(file);
     }
 
-    // === ΣΧΕΔΙΑΣΜΟΣ ΤΟΥ ΠΙΝΑΚΑ ΣΤΗΝ ΟΘΟΝΗ ===
     function renderTable() {
-        const query = document.getElementById('searchBox').value.toLowerCase();
+        const query = (document.getElementById('searchBox')?.value || '').toLowerCase();
         const tbody = document.getElementById('tableBody');
         tbody.innerHTML = '';
-        
-        let filtered = products.filter(p => p.sku.toLowerCase().includes(query) || p.name.toLowerCase().includes(query));
+
+        const fragment = document.createDocumentFragment();
+        const filtered = products.filter(p => (p.sku || '').toLowerCase().includes(query) || (p.name || '').toLowerCase().includes(query));
 
         filtered.forEach(p => {
-            let statusText = p.status === 'pending' ? 'ΣΕ ΑΝΑΜΟΝΗ' : 
-                             p.status === 'working' ? 'ΕΠΕΞΕΡΓΑΣΙΑ...' : 
-                             p.status === 'error' ? 'ΣΦΑΛΜΑ' : 'ΟΛΟΚΛΗΡΩΘΗΚΕ';
-                             
-            let seoPreview = p.result ? `<span style="color:#4ade80; font-family:monospace; font-size:0.8rem;">Έτοιμο (Title, Desc, Social)</span>` : `<span style="color:#666;">-</span>`;
+            const row = document.createElement('tr');
 
-            tbody.innerHTML += `
-                <tr>
-                    <td><b style="color:var(--aloha)">${p.sku}</b></td>
-                    <td><strong>${p.name}</strong><br><small style="color:#888">${p.collection}</small></td>
-                    <td><span class="badge status-${p.status}">${statusText}</span></td>
-                    <td>${seoPreview}</td>
-                </tr>
-            `;
+            const skuCell = document.createElement('td');
+            const skuB = document.createElement('b');
+            skuB.style.color = 'var(--aloha)';
+            skuB.textContent = p.sku || '';
+            skuCell.appendChild(skuB);
+
+            const nameCell = document.createElement('td');
+            const strong = document.createElement('strong');
+            strong.textContent = p.name || 'Προϊόν χωρίς όνομα';
+            const br = document.createElement('br');
+            const small = document.createElement('small');
+            small.style.color = '#888';
+            small.textContent = p.collection || 'Γενική Σειρά';
+            nameCell.appendChild(strong);
+            nameCell.appendChild(br);
+            nameCell.appendChild(small);
+
+            const statusCell = document.createElement('td');
+            const badge = document.createElement('span');
+            badge.className = `badge status-${p.status}`;
+            badge.textContent = p.status === 'pending' ? 'ΣΕ ΑΝΑΜΟΝΗ' :
+                p.status === 'working' ? 'ΕΠΕΞΕΡΓΑΣΙΑ...' :
+                p.status === 'error' ? 'ΣΦΑΛΜΑ' : 'ΟΛΟΚΛΗΡΩΘΗΚΕ';
+            statusCell.appendChild(badge);
+
+            const resultCell = document.createElement('td');
+            if (p.result) {
+                const span = document.createElement('span');
+                span.style.color = '#4ade80';
+                span.style.fontFamily = 'monospace';
+                span.style.fontSize = '0.8rem';
+                span.textContent = 'Έτοιμο (Title, Desc, Social)';
+                resultCell.appendChild(span);
+            } else {
+                const dash = document.createElement('span');
+                dash.style.color = '#666';
+                dash.textContent = '-';
+                resultCell.appendChild(dash);
+            }
+
+            row.appendChild(skuCell);
+            row.appendChild(nameCell);
+            row.appendChild(statusCell);
+            row.appendChild(resultCell);
+            fragment.appendChild(row);
         });
-        
+
+        tbody.appendChild(fragment);
         document.getElementById('statTotal').innerText = products.length;
         document.getElementById('statDone').innerText = products.filter(p => p.status === 'done').length;
     }
 
-    // === Η ΛΕΙΤΟΥΡΓΙΑ ΑΝΑΜΟΝΗΣ (ΤΟ "ΦΡΕΝΟ" ΓΙΑ ΤΟ ΣΦΑΛΜΑ 429) ===
     const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
-    // === Η ΕΠΙΚΟΙΝΩΝΙΑ ΜΕ ΤΟ API (ΑΣΦΑΛΗΣ ΜΕΘΟΔΟΣ) ===
     async function fetchFromGroq(prompt) {
-        const key = document.getElementById('groqKey').value.trim();
-        if (!key) throw new Error("Δεν βρέθηκε κλειδί Groq");
+        const key = (document.getElementById('groqKey')?.value || '').trim();
+        if (!key) throw new Error('Δεν βρέθηκε κλειδί Groq');
 
         const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
             method: 'POST',
@@ -218,52 +394,65 @@
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                model: "llama3-8b-8192",
-                messages: [{role: "user", content: prompt}],
-                response_format: { type: "json_object" } // Ζητάμε καθαρό JSON
+                model: 'llama3-8b-8192',
+                messages: [{ role: 'user', content: prompt }],
+                response_format: { type: 'json_object' }
             })
         });
 
         if (!response.ok) {
-            throw new Error(`Σφάλμα Συστήματος: ${response.status}`);
+            const text = await response.text().catch(() => '');
+            throw new Error(`Σφάλμα Συστήματος: ${response.status} ${text}`);
         }
 
-        const data = await response.json();
-        return JSON.parse(data.choices[0].message.content);
+        const data = await response.json().catch(() => {
+            throw new Error('Άκυρο JSON από το Groq API');
+        });
+
+        const raw = data?.choices?.[0]?.message?.content;
+        if (!raw) throw new Error('Κενή απάντηση από το μοντέλο');
+
+        try {
+            const parsed = JSON.parse(raw);
+            if (!parsed || typeof parsed !== 'object') throw new Error('Μη έγκυρο αντικείμενο JSON');
+            if (!parsed.title || !parsed.desc || !parsed.social) {
+                throw new Error('Η απάντηση δεν περιέχει title/desc/social');
+            }
+            return parsed;
+        } catch (err) {
+            console.error('Invalid Groq response parsing:', err, 'raw:', raw);
+            throw new Error('Το μοντέλο επέστρεψε μη έγκυρο JSON');
+        }
     }
 
-    // === Η ΛΟΓΙΚΗ ΕΠΕΞΕΡΓΑΣΙΑΣ ΓΙΑ ΕΝΑ ΠΡΟΪΟΝ ===
     async function processSingleProduct(p) {
         p.status = 'working';
         renderTable();
 
-        // 1. Τυχαία επιλογή δασκάλου/επαγγελματία (Anti-Duplicate)
         const guru = theGurus[Math.floor(Math.random() * theGurus.length)];
-        
-        // 2. Αναγνώριση Στρατηγικής (Magic Pro vs Ημιμόνιμο)
-        const isMagic = p.collection.toLowerCase().includes('magic');
-        const strategy = isMagic ? 
-            "MAGIC PRO. Τόνισε ότι είναι σύστημα Lifestyle Freedom, αλλάζει χρώμα πάνω από το Gel (Color Chameleon) και αφαιρείται με απλό ασετόν (Safe Removal)." : 
-            "ΗΜΙΜΟΝΙΜΟ ΒΕΡΝΙΚΙ. Τόνισε την αντοχή 4+ Weeks Wear και τη δύναμη ασπίδας (Shield Strength).";
+        const isMagic = String(p.collection || '').toLowerCase().includes('magic');
+        const strategy = isMagic ?
+            'MAGIC PRO. Τόνισε ότι είναι σύστημα Lifestyle Freedom, αλλάζει χρώμα πάνω από το Gel (Color Chameleon) και αφαιρείται με απαλό τρόπο.' :
+            'ΗΜΙΜΟΝΙΜΟ ΒΕΡΝΙΚΙ. Τόνισε την αντοχή 4+ Weeks Wear και τη δύναμη ασπίδας (Shield Strength).';
 
-        // 3. Αναγνώριση DUO SET (αν ο κωδικός έχει αριθμό π.χ. 009)
-        const numberMatch = p.sku.match(/\d+/);
-        const duoNote = numberMatch ? `ΕΞΥΠΝΗ ΟΔΗΓΙΑ: Ανέφερε ότι το χρώμα αυτό υπάρχει και σε DUO SET για απόλυτο συνδυασμό Μανικιούρ και Πεντικιούρ (Match).` : "";
+        const numberMatch = String(p.sku || '').match(/\d+/);
+        const duoNote = numberMatch ?
+            'ΕΞΥΠΝΗ ΟΔΗΓΙΑ: Ανέφερε ότι το χρώμα αυτό υπάρχει και σε DUO SET για απόλυτο συνδυασμό Μανικιούρ και εφαρμογής.' :
+            'Μην αναφέρεις DUO SET αν δεν υπάρχει λόγος.';
 
-        // 4. Το κείμενο οδηγίας
         const brand = document.getElementById('brandStory').value;
         const prompt = `
-            Είσαι ο Expert της ALOHA Nails. 
+            Είσαι ο Expert της ALOHA Nails.
             Γενικές Οδηγίες Brand: ${brand}
             Στυλ Γραφής: ${guru.style}
-            
+
             ΠΡΟΪΟΝ ΓΙΑ ΑΝΑΛΥΣΗ: ${p.name}
             ΚΩΔΙΚΟΣ: ${p.sku}
             ΣΕΙΡΑ: ${p.collection}
-            
+
             ΟΔΗΓΙΕΣ ΣΤΡΑΤΗΓΙΚΗΣ: ${strategy}
             ${duoNote}
-            
+
             Δημιούργησε τα εξής και επίστρεψέ τα ΜΟΝΟ σε μορφή JSON (ακριβώς όπως αυτό το παράδειγμα):
             {
                 "title": "Ο τέλειος SEO τίτλος μέχρι 60 χαρακτήρες",
@@ -280,396 +469,55 @@
             console.error(`Σφάλμα στο ${p.sku}:`, error);
             p.status = 'error';
         }
-        
+
         renderTable();
     }
 
-    // === ΜΑΖΙΚΗ ΕΠΕΞΕΡΓΑΣΙΑ ΜΕ ΑΣΦΑΛΕΙΑ ===
     async function startBulkProcessing() {
         const pendingProducts = products.filter(p => p.status === 'pending');
-        
+
         if (pendingProducts.length === 0) {
-            alert("Δεν υπάρχουν προϊόντα σε αναμονή. Μήπως τα έχεις τελειώσει όλα;");
+            alert('Δεν υπάρχουν προϊόντα σε αναμονή. Μήπως τα έχεις τελειώσει όλα;');
             return;
         }
 
-        if (!confirm(`Έχεις ${pendingProducts.length} προϊόντα έτοιμα. Η διαδικασία θα ξεκινήσει. Παρακαλώ μην κλείσεις αυτή τη σελίδα.`)) return;
+        if (!confirm(`Έχεις ${pendingProducts.length} προϊόντα έτοιμα. Η διαδικασία θα ξεκινήσει. Παρακαλώ μην κλείσεις αυτή τη σελίδα.`)) {
+            return;
+        }
 
         for (let i = 0; i < pendingProducts.length; i++) {
-            let product = pendingProducts[i];
+            const product = pendingProducts[i];
             await processSingleProduct(product);
-            
-            // ΕΔΩ ΕΙΝΑΙ ΤΟ ΜΥΣΤΙΚΟ ΠΟΥ ΣΕ ΣΩΖΕΙ (4 δευτερόλεπτα αναμονή = 15 κλήσεις το λεπτό)
             if (i < pendingProducts.length - 1) {
-                await sleep(4000); 
+                await sleep(4000);
             }
         }
-        
-        alert("🎉 Η μαζική επεξεργασία ολοκληρώθηκε!");
+
+        alert('🎉 Η μαζική επεξεργασία ολοκληρώθηκε!');
     }
 
-    // === ΚΑΤΕΒΑΣΜΑ ΣΕ CSV ΓΙΑ ΤΟ E-SHOP ΣΟΥ ===
     function exportData() {
-        // Παίρνουμε μόνο όσα πέτυχαν
         const readyProducts = products.filter(p => p.result != null);
-        
+
         if (readyProducts.length === 0) {
-            alert("Δεν υπάρχουν έτοιμα κείμενα για κατέβασμα.");
+            alert('Δεν υπάρχουν έτοιμα κείμενα για κατέβασμα.');
             return;
         }
 
         const csvRows = readyProducts.map(p => ({
-            "Κωδικός (SKU)": p.sku,
-            "Όνομα Προϊόντος": p.name,
-            "Σειρά": p.collection,
-            "SEO Τίτλος": p.result.title,
-            "SEO Περιγραφή": p.result.desc,
-            "Instagram Text": p.result.social
+            'Κωδικός (SKU)': p.sku,
+            'Όνομα Προϊόντος': p.name,
+            'Σειρά': p.collection,
+            'SEO Τίτλος': p.result.title,
+            'SEO Περιγραφή': p.result.desc,
+            'Instagram Text': p.result.social
         }));
 
         const csvString = Papa.unparse(csvRows);
-        const blob = new Blob([new Uint8Array([0xEF, 0xBB, 0xBF]), csvString], { type: "text/csv;charset=utf-8" });
-        const link = document.createElement("a");
+        const blob = new Blob([new Uint8Array([0xEF, 0xBB, 0xBF]), csvString], { type: 'text/csv;charset=utf-8' });
+        const link = document.createElement('a');
         link.href = URL.createObjectURL(blob);
-        link.download = "Aloha_Nails_SEO_Ready.csv";
-        link.click();
-    }
-</script>
-</body>
-</html><!DOCTYPE html>
-<html lang="el">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ALOHA NAILS GURU - Masterpiece V15.0</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@400;600&display=swap" rel="stylesheet">
-    <style>
-        :root { --aloha: #ff4f6d; --bg: #0a0a0a; --panel: #161616; --border: #262626; --text: #f5f5f5; }
-        body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; margin: 0; padding: 20px; }
-        .container { max-width: 1300px; margin: 0 auto; }
-        header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid var(--border); padding-bottom: 20px; }
-        header h1 { font-family: 'Syne'; color: var(--aloha); font-size: 2.5rem; margin: 0; }
-        
-        /* Καρτέλες (Tabs) */
-        .tabs { display: flex; gap: 5px; margin-bottom: 0; }
-        .tab-btn { background: #111; border: 1px solid var(--border); border-bottom: none; color: #888; padding: 15px 25px; cursor: pointer; border-radius: 10px 10px 0 0; font-weight: bold; font-size: 0.9rem; }
-        .tab-btn.active { background: var(--panel); color: var(--aloha); border-top: 3px solid var(--aloha); }
-        .tab-content { background: var(--panel); border: 1px solid var(--border); padding: 30px; border-radius: 0 10px 10px 10px; display: none; min-height: 500px; }
-        .tab-content.active { display: block; }
-
-        /* Πλαίσια και Κουμπιά */
-        input, textarea, select { width: 100%; background: #000; border: 1px solid var(--border); color: white; padding: 12px; border-radius: 8px; margin-top: 5px; box-sizing: border-box; }
-        .btn { background: var(--aloha); color: white; border: none; padding: 12px 25px; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.2s; }
-        .btn:hover { opacity: 0.8; }
-        .btn-dark { background: #333; }
-
-        /* Πίνακας Προϊόντων */
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; background: #000; border-radius: 10px; overflow: hidden; }
-        th { text-align: left; padding: 15px; color: var(--aloha); border-bottom: 1px solid var(--border); }
-        td { padding: 15px; border-bottom: 1px solid var(--border); font-size: 0.9rem; }
-        .badge { padding: 5px 10px; border-radius: 5px; font-size: 0.75rem; font-weight: bold; }
-        .status-pending { background: #333; color: #999; }
-        .status-done { background: #1b4332; color: #8ed0a9; }
-        .status-error { background: #5c1a1a; color: #ff8888; }
-        .status-working { background: #b8860b; color: #fff; }
-    </style>
-</head>
-<body>
-
-<div class="container">
-    <header>
-        <h1>ALOHA NAILS <span style="color:white">GURU V15.0</span></h1>
-        <p style="color:#888; font-size:1.1rem;">Το Απόλυτο και Ασφαλές Σύστημα Τεχνητής Νοημοσύνης</p>
-    </header>
-
-    <div class="tabs">
-        <button class="tab-btn active" onclick="openTab(event, 'setup')">1. ΡΥΘΜΙΣΕΙΣ & ΕΙΣΑΓΩΓΗ EXCEL</button>
-        <button class="tab-btn" onclick="openTab(event, 'inventory')">2. ΕΠΕΞΕΡΓΑΣΙΑ ΠΡΟΪΟΝΤΩΝ</button>
-    </div>
-
-    <div id="setup" class="tab-content active">
-        <div style="display:flex; gap:30px;">
-            <div style="flex:1;">
-                <h3 style="color:var(--aloha)">🔑 Τα Κλειδιά σου (API)</h3>
-                <label>Κλειδί GROQ (Για το μοντέλο Llama 3):</label>
-                <input type="password" id="groqKey" placeholder="gsk_..." onchange="saveConfig()">
-                <br><br>
-                <label>Επιλογή Μοντέλου:</label>
-                <select id="modelSelect" onchange="saveConfig()">
-                    <option value="groq">Groq - Llama 3 8B (Συνιστάται)</option>
-                </select>
-            </div>
-            <div style="flex:1;">
-                <h3 style="color:var(--aloha)">🧠 Γνώσεις της Εταιρείας (Brand Story)</h3>
-                <label>Τι πρέπει να θυμάται πάντα ο Guru;</label>
-                <textarea id="brandStory" rows="6" onchange="saveConfig()">ALOHA Nails: Υψηλή ποιότητα. Vegan, Cruelty Free. Hema Free. Στόχος μας η απόλυτη εξυπηρέτηση των επαγγελματιών και η ελευθερία στο στυλ.</textarea>
-            </div>
-        </div>
-        
-        <hr style="border:1px solid #333; margin: 40px 0;">
-        
-        <div style="text-align:center;">
-            <h3>📁 Ανέβασε το αρχείο με τα χρώματα</h3>
-            <p style="color:#aaa;">Το Excel πρέπει να έχει στήλες με όνομα: <b>SKU</b>, <b>Όνομα</b>, <b>Σειρά</b>.</p>
-            <button class="btn" style="font-size:1.2rem; padding: 15px 40px;" onclick="document.getElementById('fileIn').click()">ΕΠΙΛΟΓΗ ΑΡΧΕΙΟΥ EXCEL</button>
-            <input type="file" id="fileIn" hidden accept=".xlsx, .xls, .csv" onchange="importExcel(this)">
-        </div>
-    </div>
-
-    <div id="inventory" class="tab-content">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 20px;">
-            <div style="font-size:1.2rem; font-weight:bold;">
-                Σύνολο: <span id="statTotal" style="color:var(--aloha)">0</span> | 
-                Έτοιμα: <span id="statDone" style="color:#4ade80">0</span>
-            </div>
-            <div>
-                <button class="btn" onclick="startBulkProcessing()">🪄 ΜΑΖΙΚΗ ΕΠΕΞΕΡΓΑΣΙΑ (ΑΣΦΑΛΗΣ)</button>
-                <button class="btn btn-dark" onclick="exportData()">📥 ΚΑΤΕΒΑΣΜΑ ΣΕ CSV</button>
-            </div>
-        </div>
-
-        <input type="text" id="searchBox" placeholder="🔍 Ψάξε κωδικό ή όνομα..." onkeyup="renderTable()">
-
-        <table>
-            <thead>
-                <tr>
-                    <th>ΚΩΔΙΚΟΣ (SKU)</th>
-                    <th>ΠΡΟΪΟΝ / ΣΕΙΡΑ</th>
-                    <th>ΚΑΤΑΣΤΑΣΗ</th>
-                    <th>ΑΠΟΤΕΛΕΣΜΑ SEO</th>
-                </tr>
-            </thead>
-            <tbody id="tableBody">
-                <tr><td colspan="4" style="text-align:center; padding:30px; color:#666;">Ο πίνακας είναι άδειος. Ανέβασε αρχείο στην πρώτη καρτέλα.</td></tr>
-            </tbody>
-        </table>
-    </div>
-</div>
-
-<script>
-    // === ΒΑΣΙΚΑ ΔΕΔΟΜΕΝΑ ===
-    let products = [];
-    const theGurus = [
-        { name: "Τεχνικός", style: "Γράψε αυστηρά, επαγγελματικά. Τόνισε το Hema-Free και την εφαρμογή." },
-        { name: "Fashion", style: "Γράψε με στυλ, σαν περιοδικό μόδας. Τόνισε τα ρούχα που ταιριάζουν." },
-        { name: "Social Media", style: "Γράψε χαρούμενα, με emojis. Τόνισε τη λέξη viral." }
-    ];
-
-    // === ΣΥΣΤΗΜΑ ΚΑΡΤΕΛΩΝ (TABS) ===
-    function openTab(evt, tabName) {
-        let contents = document.getElementsByClassName("tab-content");
-        for (let i = 0; i < contents.length; i++) contents[i].classList.remove("active");
-        let btns = document.getElementsByClassName("tab-btn");
-        for (let i = 0; i < btns.length; i++) btns[i].classList.remove("active");
-        document.getElementById(tabName).classList.add("active");
-        evt.currentTarget.classList.add("active");
-    }
-
-    // === ΑΠΟΘΗΚΕΥΣΗ ΡΥΘΜΙΣΕΩΝ ΣΤΟΝ BROWSER ===
-    window.onload = () => {
-        document.getElementById('groqKey').value = localStorage.getItem('aloha_groq') || '';
-        document.getElementById('brandStory').value = localStorage.getItem('aloha_brand') || 'ALOHA Nails: Hema Free, Cruelty Free.';
-    };
-
-    function saveConfig() {
-        localStorage.setItem('aloha_groq', document.getElementById('groqKey').value);
-        localStorage.setItem('aloha_brand', document.getElementById('brandStory').value);
-    }
-
-    // === ΕΙΣΑΓΩΓΗ EXCEL (Η ΑΣΠΙΔΑ ΤΩΝ ΚΕΝΩΝ ΚΕΛΙΩΝ) ===
-    function importExcel(input) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            try {
-                const data = new Uint8Array(e.target.result);
-                const workbook = XLSX.read(data, {type: 'array'});
-                const sheet = workbook.Sheets[workbook.SheetNames[0]];
-                const jsonRaw = XLSX.utils.sheet_to_json(sheet);
-                
-                // ΕΔΩ ΕΙΝΑΙ Η ΛΥΣΗ ΓΙΑ ΤΟ ΣΦΑΛΜΑ 100: Αποκλείουμε όσες γραμμές δεν έχουν SKU.
-                products = jsonRaw.filter(row => row.SKU || row['Κωδικός']).map((row, index) => {
-                    return {
-                        id: index,
-                        sku: String(row.SKU || row['Κωδικός'] || '').trim(),
-                        name: row.Name || row['Όνομα'] || 'Προϊόν χωρίς όνομα',
-                        collection: row.Collection || row['Σειρά'] || 'Γενική Σειρά',
-                        status: 'pending', // pending, working, done, error
-                        result: null
-                    };
-                });
-                
-                renderTable();
-                alert(`Μπράβο! Φορτώθηκαν με επιτυχία ${products.length} προϊόντα χωρίς σφάλματα.`);
-                // Αυτόματη αλλαγή στην καρτέλα προϊόντων
-                document.getElementsByClassName('tab-btn')[1].click();
-            } catch (err) {
-                alert("Υπήρξε πρόβλημα με το Excel. Σιγουρέψου ότι δεν είναι κατεστραμμένο.");
-                console.error(err);
-            }
-        };
-        reader.readAsArrayBuffer(input.files[0]);
-    }
-
-    // === ΣΧΕΔΙΑΣΜΟΣ ΤΟΥ ΠΙΝΑΚΑ ΣΤΗΝ ΟΘΟΝΗ ===
-    function renderTable() {
-        const query = document.getElementById('searchBox').value.toLowerCase();
-        const tbody = document.getElementById('tableBody');
-        tbody.innerHTML = '';
-        
-        let filtered = products.filter(p => p.sku.toLowerCase().includes(query) || p.name.toLowerCase().includes(query));
-
-        filtered.forEach(p => {
-            let statusText = p.status === 'pending' ? 'ΣΕ ΑΝΑΜΟΝΗ' : 
-                             p.status === 'working' ? 'ΕΠΕΞΕΡΓΑΣΙΑ...' : 
-                             p.status === 'error' ? 'ΣΦΑΛΜΑ' : 'ΟΛΟΚΛΗΡΩΘΗΚΕ';
-                             
-            let seoPreview = p.result ? `<span style="color:#4ade80; font-family:monospace; font-size:0.8rem;">Έτοιμο (Title, Desc, Social)</span>` : `<span style="color:#666;">-</span>`;
-
-            tbody.innerHTML += `
-                <tr>
-                    <td><b style="color:var(--aloha)">${p.sku}</b></td>
-                    <td><strong>${p.name}</strong><br><small style="color:#888">${p.collection}</small></td>
-                    <td><span class="badge status-${p.status}">${statusText}</span></td>
-                    <td>${seoPreview}</td>
-                </tr>
-            `;
-        });
-        
-        document.getElementById('statTotal').innerText = products.length;
-        document.getElementById('statDone').innerText = products.filter(p => p.status === 'done').length;
-    }
-
-    // === Η ΛΕΙΤΟΥΡΓΙΑ ΑΝΑΜΟΝΗΣ (ΤΟ "ΦΡΕΝΟ" ΓΙΑ ΤΟ ΣΦΑΛΜΑ 429) ===
-    const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
-
-    // === Η ΕΠΙΚΟΙΝΩΝΙΑ ΜΕ ΤΟ API (ΑΣΦΑΛΗΣ ΜΕΘΟΔΟΣ) ===
-    async function fetchFromGroq(prompt) {
-        const key = document.getElementById('groqKey').value.trim();
-        if (!key) throw new Error("Δεν βρέθηκε κλειδί Groq");
-
-        const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${key}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                model: "llama3-8b-8192",
-                messages: [{role: "user", content: prompt}],
-                response_format: { type: "json_object" } // Ζητάμε καθαρό JSON
-            })
-        });
-
-        if (!response.ok) {
-            throw new Error(`Σφάλμα Συστήματος: ${response.status}`);
-        }
-
-        const data = await response.json();
-        return JSON.parse(data.choices[0].message.content);
-    }
-
-    // === Η ΛΟΓΙΚΗ ΕΠΕΞΕΡΓΑΣΙΑΣ ΓΙΑ ΕΝΑ ΠΡΟΪΟΝ ===
-    async function processSingleProduct(p) {
-        p.status = 'working';
-        renderTable();
-
-        // 1. Τυχαία επιλογή δασκάλου/επαγγελματία (Anti-Duplicate)
-        const guru = theGurus[Math.floor(Math.random() * theGurus.length)];
-        
-        // 2. Αναγνώριση Στρατηγικής (Magic Pro vs Ημιμόνιμο)
-        const isMagic = p.collection.toLowerCase().includes('magic');
-        const strategy = isMagic ? 
-            "MAGIC PRO. Τόνισε ότι είναι σύστημα Lifestyle Freedom, αλλάζει χρώμα πάνω από το Gel (Color Chameleon) και αφαιρείται με απλό ασετόν (Safe Removal)." : 
-            "ΗΜΙΜΟΝΙΜΟ ΒΕΡΝΙΚΙ. Τόνισε την αντοχή 4+ Weeks Wear και τη δύναμη ασπίδας (Shield Strength).";
-
-        // 3. Αναγνώριση DUO SET (αν ο κωδικός έχει αριθμό π.χ. 009)
-        const numberMatch = p.sku.match(/\d+/);
-        const duoNote = numberMatch ? `ΕΞΥΠΝΗ ΟΔΗΓΙΑ: Ανέφερε ότι το χρώμα αυτό υπάρχει και σε DUO SET για απόλυτο συνδυασμό Μανικιούρ και Πεντικιούρ (Match).` : "";
-
-        // 4. Το κείμενο οδηγίας
-        const brand = document.getElementById('brandStory').value;
-        const prompt = `
-            Είσαι ο Expert της ALOHA Nails. 
-            Γενικές Οδηγίες Brand: ${brand}
-            Στυλ Γραφής: ${guru.style}
-            
-            ΠΡΟΪΟΝ ΓΙΑ ΑΝΑΛΥΣΗ: ${p.name}
-            ΚΩΔΙΚΟΣ: ${p.sku}
-            ΣΕΙΡΑ: ${p.collection}
-            
-            ΟΔΗΓΙΕΣ ΣΤΡΑΤΗΓΙΚΗΣ: ${strategy}
-            ${duoNote}
-            
-            Δημιούργησε τα εξής και επίστρεψέ τα ΜΟΝΟ σε μορφή JSON (ακριβώς όπως αυτό το παράδειγμα):
-            {
-                "title": "Ο τέλειος SEO τίτλος μέχρι 60 χαρακτήρες",
-                "desc": "Η τέλεια SEO περιγραφή μέχρι 150 χαρακτήρες",
-                "social": "Κείμενο για Instagram με Emojis"
-            }
-        `;
-
-        try {
-            const resultJSON = await fetchFromGroq(prompt);
-            p.result = resultJSON;
-            p.status = 'done';
-        } catch (error) {
-            console.error(`Σφάλμα στο ${p.sku}:`, error);
-            p.status = 'error';
-        }
-        
-        renderTable();
-    }
-
-    // === ΜΑΖΙΚΗ ΕΠΕΞΕΡΓΑΣΙΑ ΜΕ ΑΣΦΑΛΕΙΑ ===
-    async function startBulkProcessing() {
-        const pendingProducts = products.filter(p => p.status === 'pending');
-        
-        if (pendingProducts.length === 0) {
-            alert("Δεν υπάρχουν προϊόντα σε αναμονή. Μήπως τα έχεις τελειώσει όλα;");
-            return;
-        }
-
-        if (!confirm(`Έχεις ${pendingProducts.length} προϊόντα έτοιμα. Η διαδικασία θα ξεκινήσει. Παρακαλώ μην κλείσεις αυτή τη σελίδα.`)) return;
-
-        for (let i = 0; i < pendingProducts.length; i++) {
-            let product = pendingProducts[i];
-            await processSingleProduct(product);
-            
-            // ΕΔΩ ΕΙΝΑΙ ΤΟ ΜΥΣΤΙΚΟ ΠΟΥ ΣΕ ΣΩΖΕΙ (4 δευτερόλεπτα αναμονή = 15 κλήσεις το λεπτό)
-            if (i < pendingProducts.length - 1) {
-                await sleep(4000); 
-            }
-        }
-        
-        alert("🎉 Η μαζική επεξεργασία ολοκληρώθηκε!");
-    }
-
-    // === ΚΑΤΕΒΑΣΜΑ ΣΕ CSV ΓΙΑ ΤΟ E-SHOP ΣΟΥ ===
-    function exportData() {
-        // Παίρνουμε μόνο όσα πέτυχαν
-        const readyProducts = products.filter(p => p.result != null);
-        
-        if (readyProducts.length === 0) {
-            alert("Δεν υπάρχουν έτοιμα κείμενα για κατέβασμα.");
-            return;
-        }
-
-        const csvRows = readyProducts.map(p => ({
-            "Κωδικός (SKU)": p.sku,
-            "Όνομα Προϊόντος": p.name,
-            "Σειρά": p.collection,
-            "SEO Τίτλος": p.result.title,
-            "SEO Περιγραφή": p.result.desc,
-            "Instagram Text": p.result.social
-        }));
-
-        const csvString = Papa.unparse(csvRows);
-        const blob = new Blob([new Uint8Array([0xEF, 0xBB, 0xBF]), csvString], { type: "text/csv;charset=utf-8" });
-        const link = document.createElement("a");
-        link.href = URL.createObjectURL(blob);
-        link.download = "Aloha_Nails_SEO_Ready.csv";
+        link.download = 'Aloha_Nails_SEO_Ready.csv';
         link.click();
     }
 </script>
